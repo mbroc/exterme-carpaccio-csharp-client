@@ -11,7 +11,7 @@ namespace xCarpaccio.client
     {
         public IndexModule()
         {
-            Get["/"] = _ => "It works !!! You need to register your server on main server.";
+            Get["/"] = _ => "VIVE LE COCHON !";
 
             Post["/order"] = _ =>
             {
@@ -22,11 +22,58 @@ namespace xCarpaccio.client
 
                 var order = this.Bind<Order>();
                 Bill bill = null;
+                decimal sousTotal = 0;
+                decimal sousTotalTVA = 0;
+                decimal total = 0;
+
                 //TODO: do something with order and return a bill if possible
-                // If you manage to get the result, return a Bill object (JSON serialization is done automagically)
-                // Else return a HTTP 404 error : return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
                 
-                return bill;
+                // Si on a une commande de l'allemagne
+                if (order != null && order.Country == "DE")
+                {
+                    
+                
+                    // Calcul sous-total (sans TVA ni réduction)
+                    for (int i = 0; i < order.Prices.Length; i++)
+                    {
+                        sousTotal += (order.Prices[i]*order.Quantities[i]);
+                    }
+
+                    // Calcul avec TVA
+                    sousTotalTVA = sousTotal * (decimal)1.20;
+
+                    // Calcul avec réduction
+                    if (sousTotalTVA >= 1000)
+                    {
+                        total = sousTotalTVA*(decimal) 0.97;
+                    }
+
+                    // Else return a HTTP 404 error
+                    else
+                    {
+                        return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
+                    }
+
+
+
+                    bill.total = 0;
+                }
+
+                // Si pas de commande ou commande non-allemande
+                else
+                
+                // If you manage to get the result, return a Bill object (JSON serialization is done automagically)
+                if (bill != null)
+                {
+                    return bill;
+                }
+
+                // Else return a HTTP 404 error
+                else
+                {
+                    return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
+                }
+                
             };
 
             Post["/feedback"] = _ =>

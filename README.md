@@ -5,7 +5,7 @@ This solution contains an empty bootstrap project using Nancy (a light weight we
 ## First check all is working
 
 - you have access to the main server in a browser (URL given on whiteboard)
-- you need to setup autorisation to run a web server : netsh http add urlacl url=http://+:8080/ user=Everyone
+- you need to setup autorisation to run a web server : netsh http add urlacl url=http://+:8080/ user="Tout le monde"
 - you can then build solution and run it, it should open a web server in console with message "Your application is running..."
 - try to open your server URL (http://localhost:8080/), it should display a message like "It works..."
 - register your server on main server, with your real first/last name, your should see some logs in your server console
