@@ -22,17 +22,13 @@ namespace xCarpaccio.client
 
                 var order = this.Bind<Order>();
                 Bill bill = null;
-                decimal sousTotal = 0;
-                decimal sousTotalTVA = 0;
-                decimal total = 0;
-
-                //TODO: do something with order and return a bill if possible
+                
                 
                 // Si on a une commande de l'allemagne
                 if (order != null && order.Country == "DE")
                 {
-                    
-                
+
+
                     // Calcul sous-total (sans TVA ni réduction)
                     for (int i = 0; i < order.Prices.Length; i++)
                     {
@@ -40,7 +36,7 @@ namespace xCarpaccio.client
                     }
 
                     // Calcul avec TVA
-                    sousTotalTVA = sousTotal * (decimal)1.20;
+                    sousTotalTVA = sousTotal*(decimal) 1.20;
 
                     // Calcul avec réduction
                     if (sousTotalTVA >= 1000)
@@ -54,13 +50,17 @@ namespace xCarpaccio.client
                         return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
                     }
 
-
-
-                    bill.total = 0;
+                
+                    bill = total;
                 }
 
                 // Si pas de commande ou commande non-allemande
+                // Else return a HTTP 404 error
                 else
+                {
+                    return Negotiate.WithStatusCode(HttpStatusCode.NotFound);
+                    
+                }
                 
                 // If you manage to get the result, return a Bill object (JSON serialization is done automagically)
                 if (bill != null)
